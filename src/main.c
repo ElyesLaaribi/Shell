@@ -5,15 +5,21 @@
 int main(int argc, char *argv[]) {
   // Flush after every printf
   setbuf(stdout, NULL);
-
-  // printing $ sign at the beginning of the shell
+  
   printf("$ ");
 
-  // captures the users command
-  char input[100];
-  fgets(input, sizeof(input), stdin);
-  input[strcspn(input, "\n")] = '\0';
-  printf("%s: command not found\n", input);
+  // Read users input
+  int max_size = 1024;
+  char input[max_size];
+
+  while (fgets(input, max_size, stdin) != NULL)
+  {
+    // check if input is given 
+    input[strcspn(input, "\n")] = '\0';
+    printf("%s: command not found\n", input);
+    printf("$ ");
+  }
+  
 
   return 0;
 }
