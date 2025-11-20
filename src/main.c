@@ -15,10 +15,28 @@ int main(int argc, char *argv[])
 
   while (fgets(input, max_size, stdin) != NULL)
   {
-    // check if input is given
     input[strcspn(input, "\n")] = '\0';
+
+    // exit 0 / 1 command
     if (strcmp(input, "exit 0") == 0 || strcmp(input, "exit 1") == 0)
+    {
       exit(0);
+    }
+
+    // echo command
+    if (strncmp(input, "echo ", 5) == 0)
+    {
+      printf("%s\n", input + 5);
+      printf("$ ");
+      continue;
+    }
+
+    if (strcmp(input, "echo") == 0)
+    {
+      printf("\n");
+      printf("$ ");
+      continue;
+    }
 
     printf("%s: command not found\n", input);
     printf("$ ");
