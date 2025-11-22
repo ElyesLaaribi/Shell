@@ -41,7 +41,7 @@ int is_builtin(const char *cmd)
 
 void handle_exit(const char *input)
 {
-  if (strcmp(input, "exit 0") == 0 || strcmp(input, "exit 1") == 0)
+  if (strcmp(input, "exit 0") == 0 || strcmp(input, "exit 1") == 0 || strcmp(input, "exit") == 0)
   {
     exit(0);
   }
