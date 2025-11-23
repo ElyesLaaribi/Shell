@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 
 #define cmd_available 3
 
@@ -61,18 +62,52 @@ void handle_echo(const char *input)
 
 void handle_type(const char *input)
 {
+  char cmd[256];
+  sscanf(input, "type %255s", cmd);
+
   if (strncmp(input, "type ", 5) != 0)
     return;
 
-  const char *cmd = input + 5;
+  // const char *cmd = input + 5;
   if (is_builtin(cmd))
   {
     printf("%s is a shell builtin\n", cmd);
+    return;
   }
-  else
+
+  // retrieve path
+  char *path = getenv("PATH");
+  if (!path)
   {
     printf("%s: not found\n", cmd);
+    return;
   }
+
+  // copy path to modify it
+  char path_copy[4096];
+  strncpy(path_copy, path, sizeof(path_copy));
+
+  // split path
+  char *dir = strtok(path_copy, ":");
+
+  while (dir != NULL)
+  {
+    char full[1024];
+    snprintf(full, sizeof(full), "%s%s", dir, cmd);
+
+    if (access(full, F_OK) == 0)
+    {
+      if (access(full, X_OK) == 0)
+      {
+        printf("%s is %s\n", cmd, full);
+        return;
+      }
+    }
+
+    dir = strtok(NULL, ":");
+  }
+
+  printf("%s: not found\n", cmd);
 }
 
 void process_command(const char *input)
