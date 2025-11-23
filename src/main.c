@@ -93,7 +93,7 @@ void handle_type(const char *input)
   while (dir != NULL)
   {
     char full[1024];
-    snprintf(full, sizeof(full), "%s%s", dir, cmd);
+    snprintf(full, sizeof(full), "%s/%s", dir, cmd);
 
     if (access(full, F_OK) == 0)
     {
